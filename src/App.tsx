@@ -1,23 +1,27 @@
 import React from 'react'
-import logo from './logo.svg'
+import {
+  AppBar,
+  Container,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
+import TableData from 'components/table-data/TableData'
+import Theme from 'theme'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={Theme}>
+        <AppBar position="static" variant="outlined">
+          <Toolbar>
+            <Typography variant="h6">useSort</Typography>
+          </Toolbar>
+        </AppBar>
+        <Container>
+          <TableData />
+        </Container>
+      </ThemeProvider>
     </div>
   )
 }

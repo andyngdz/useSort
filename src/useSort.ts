@@ -6,7 +6,8 @@ import { head, merge, orderBy } from 'lodash'
 const useSort = <T extends Record<string, string>>(
   data: Array<T>,
   defaultSort: keyof T,
-  defaultDirection: TDirection = 'asc'
+  defaultDirection: TDirection = 'asc',
+  onSortBy = orderBy
 ): IUseSort<T> => {
   const defaultSorts = {
     [defaultSort]: {
@@ -58,7 +59,7 @@ const useSort = <T extends Record<string, string>>(
     setCurrentSort(key)
   }
 
-  const sortedData = orderBy(data, (item) => item[currentSort].toLowerCase(), [
+  const sortedData = onSortBy(data, (item) => item[currentSort].toLowerCase(), [
     sorts[currentSort as string].direction,
   ])
 
