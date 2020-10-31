@@ -9,11 +9,13 @@ interface ISort {
 }
 
 interface IUseSort<T> {
-  sortedData: Array<T>
-
   sorts: Record<keyof T, ISort>
 
+  sortedData: Array<T>
+
   sortBy: (key: keyof T) => void
+
+  loading: boolean
 }
 
 export { ISort, IUseSort, TDirection, TSortValues }

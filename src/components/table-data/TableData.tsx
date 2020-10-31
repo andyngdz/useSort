@@ -10,6 +10,7 @@ import {
   makeStyles,
 } from '@material-ui/core'
 import Data from './Data'
+import useSort from 'useSort'
 
 const useStyles = makeStyles(() => ({
   tableContainer: {
@@ -19,6 +20,9 @@ const useStyles = makeStyles(() => ({
 
 const TableData = () => {
   const classes = useStyles()
+  const { loading, sortedData, sorts, sortBy } = useSort(Data, 'id')
+
+  if (loading) return <></>
 
   return (
     <TableContainer className={classes.tableContainer}>
@@ -26,30 +30,72 @@ const TableData = () => {
         <TableHead>
           <TableRow>
             <TableCell>
-              <TableSortLabel>ID</TableSortLabel>
+              <TableSortLabel
+                direction={sorts.id.direction}
+                active={sorts.id.active}
+                onClick={() => sortBy('id')}
+              >
+                ID
+              </TableSortLabel>
             </TableCell>
             <TableCell>
-              <TableSortLabel>First name</TableSortLabel>
+              <TableSortLabel
+                direction={sorts.firstName.direction}
+                active={sorts.firstName.active}
+                onClick={() => sortBy('firstName')}
+              >
+                First name
+              </TableSortLabel>
             </TableCell>
             <TableCell>
-              <TableSortLabel>Last name</TableSortLabel>
+              <TableSortLabel
+                direction={sorts.lastName.direction}
+                active={sorts.lastName.active}
+                onClick={() => sortBy('lastName')}
+              >
+                Last name
+              </TableSortLabel>
             </TableCell>
             <TableCell>
-              <TableSortLabel>Age</TableSortLabel>
+              <TableSortLabel
+                direction={sorts.age.direction}
+                active={sorts.age.active}
+                onClick={() => sortBy('age')}
+              >
+                Age
+              </TableSortLabel>
             </TableCell>
             <TableCell>
-              <TableSortLabel>Email</TableSortLabel>
+              <TableSortLabel
+                direction={sorts.email.direction}
+                active={sorts.email.active}
+                onClick={() => sortBy('email')}
+              >
+                Email
+              </TableSortLabel>
             </TableCell>
             <TableCell>
-              <TableSortLabel>Address</TableSortLabel>
+              <TableSortLabel
+                direction={sorts.address.direction}
+                active={sorts.address.active}
+                onClick={() => sortBy('address')}
+              >
+                Address
+              </TableSortLabel>
             </TableCell>
             <TableCell>
-              <TableSortLabel>Phone number</TableSortLabel>
+              <TableSortLabel
+                direction={sorts.phoneNumber.direction}
+                active={sorts.phoneNumber.active}
+                onClick={() => sortBy('phoneNumber')}
+              >
+                Address
+              </TableSortLabel>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {Data.map((user) => {
+          {sortedData.map((user) => {
             const {
               id,
               firstName,

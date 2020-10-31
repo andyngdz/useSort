@@ -1,22 +1,23 @@
 import produce from 'immer'
 import { useState, useEffect } from 'react'
+import { isString, head, merge, orderBy } from 'lodash'
 import { ISort, IUseSort, TDirection, TSortValues } from 'types/sort'
-import { head, merge, orderBy } from 'lodash'
 
-const useSort = <T extends Record<string, string>>(
+const useSort = <T>(
   data: Array<T>,
-  defaultSort: keyof T,
-  defaultDirection: TDirection = 'asc',
+  initSort: keyof T,
+  direction: TDirection = 'asc',
   onSortBy = orderBy
 ): IUseSort<T> => {
-  const defaultSorts = {
-    [defaultSort]: {
-      direction: defaultDirection,
+  const dSorts = {
+    [initSort]: {
+      direction: direction,
       active: true,
     },
   }
-  const [currentSort, setCurrentSort] = useState<keyof T>(defaultSort)
-  const [sorts, setSorts] = useState<TSortValues>(defaultSorts)
+  const [loading, setLoading] = useState(true)
+  const [currentSort, setCurrentSort] = useState<keyof T>(initSort)
+  const [sorts, setSorts] = useState<TSortValues>(dSorts)
 
   useEffect(() => {
     const newSorts: TSortValues = {}
@@ -26,14 +27,15 @@ const useSort = <T extends Record<string, string>>(
       Object.keys(firstRow).forEach(
         (key) =>
           (newSorts[key] = {
-            direction: defaultDirection,
+            direction: direction,
             active: false,
           })
       )
     }
 
     setSorts((prevSorts) => merge(newSorts, prevSorts))
-  }, [data, defaultDirection])
+    setLoading((prevLoading) => !prevLoading)
+  }, [data, direction])
 
   const sortBy = (key: keyof T) => {
     const currentSortFor = currentSort as string
@@ -43,7 +45,7 @@ const useSort = <T extends Record<string, string>>(
       produce((draft: TSortValues) => {
         if (currentSortFor !== sortFor) {
           draft[currentSortFor].active = false
-          draft[currentSortFor].direction = defaultDirection
+          draft[currentSortFor].direction = direction
         }
 
         if (!draft[sortFor].active) {
@@ -59,11 +61,20 @@ const useSort = <T extends Record<string, string>>(
     setCurrentSort(key)
   }
 
-  const sortedData = onSortBy(data, (item) => item[currentSort].toLowerCase(), [
-    sorts[currentSort as string].direction,
-  ])
+  const sortedData = onSortBy(
+    data,
+    (item) => {
+      const value = item[currentSort]
+      if (isString(value)) {
+        return value.toLocaleLowerCase()
+      }
+      return value
+    },
+    [sorts[currentSort as string].direction]
+  )
 
-  return { sortedData, sorts: sorts as Record<keyof T, ISort>, sortBy }
+  return { loading, sortedData, sorts: sorts as Record<keyof T, ISort>, sortBy }
 }
 
 export default useSort
+export type { ISort, IUseSort, TDirection, TSortValues }
