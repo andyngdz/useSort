@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   AppBar,
-  Container,
+  Box,
   ThemeProvider,
   Toolbar,
   Typography,
@@ -18,9 +18,9 @@ function App() {
             <Typography variant="h6">useSort</Typography>
           </Toolbar>
         </AppBar>
-        <Container>
+        <Box pt={5}>
           <TableData />
-        </Container>
+        </Box>
       </ThemeProvider>
     </div>
   )
