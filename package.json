@@ -1,7 +1,17 @@
 {
-  "name": "my-app",
+  "name": "useSort",
+  "author": {
+    "name": "Andy .D Ng",
+    "email": "andynguyen.dev@gmail.com"
+  },
+  "description": "useSort hook for React",
+  "main": "src/useSort.ts",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andyngdz/useSort.git"
+  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@testing-library/jest-dom": "^5.11.4",
