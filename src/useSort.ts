@@ -1,12 +1,19 @@
 import produce from 'immer'
 import { useState, useEffect } from 'react'
 import { isString, head, merge, orderBy } from 'lodash'
-import { ISort, IUseSort, TDirection, TSortValues } from 'types/sort'
+import {
+  ISort,
+  ISortOptions,
+  IUseSort,
+  TDirection,
+  TSortValues,
+} from 'types/sort'
 
 /**
  * @param data Array of data
  * @param initSort Default sort column
- * @param direction Default direction 'asc' | 'desc'
+ * @param options `{ direction, onSortBy }` See two options below
+ * @param direction Direction 'asc' | 'desc' - default 'asc'
  * @param onSortBy
  * Default sort function
  * orders of the iteratees to sort by. If `orders` is unspecified, all values
@@ -35,9 +42,12 @@ import { ISort, IUseSort, TDirection, TSortValues } from 'types/sort'
 const useSort = <T>(
   data: Array<T>,
   initSort: keyof T,
-  direction: TDirection = 'asc',
-  onSortBy = orderBy
+  options: ISortOptions<T> = {
+    direction: 'asc',
+  }
 ): IUseSort<T> => {
+  const { direction, onSortBy } = options
+
   const dSorts = {
     [initSort]: {
       direction: direction,
@@ -90,20 +100,22 @@ const useSort = <T>(
     setCurrentSort(key)
   }
 
-  const sortedData = onSortBy(
-    data,
-    (item) => {
-      const value = item[currentSort]
-      if (isString(value)) {
-        return value.toLocaleLowerCase()
-      }
-      return value
-    },
-    [sorts[currentSort as string].direction]
-  )
+  const sortedData = onSortBy
+    ? onSortBy(data)
+    : orderBy(
+        data,
+        (item) => {
+          const value = item[currentSort]
+          if (isString(value)) {
+            return value.toLocaleLowerCase()
+          }
+          return value
+        },
+        [sorts[currentSort as string].direction]
+      )
 
   return { loading, sortedData, sorts: sorts as Record<keyof T, ISort>, sortBy }
 }
 
 export default useSort
-export type { ISort, IUseSort, TDirection, TSortValues }
+export type { ISort, ISortOptions, IUseSort, TDirection, TSortValues }

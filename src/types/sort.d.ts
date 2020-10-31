@@ -18,4 +18,10 @@ interface IUseSort<T> {
   loading: boolean
 }
 
-export { ISort, IUseSort, TDirection, TSortValues }
+interface ISortOptions<T> {
+  direction: TDirection
+
+  onSortBy?: (data: T[]) => T[]
+}
+
+export { ISort, ISortOptions, IUseSort, TDirection, TSortValues }
