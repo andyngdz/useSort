@@ -40,6 +40,15 @@ const TableData = () => {
             </TableCell>
             <TableCell>
               <TableSortLabel
+                direction={sorts.isActive.direction}
+                active={sorts.isActive.active}
+                onClick={() => sortBy('isActive')}
+              >
+                Is Active
+              </TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel
                 direction={sorts.firstName.direction}
                 active={sorts.firstName.active}
                 onClick={() => sortBy('firstName')}
@@ -98,6 +107,7 @@ const TableData = () => {
           {sortedData.map((user) => {
             const {
               id,
+              isActive,
               firstName,
               lastName,
               age,
@@ -109,6 +119,7 @@ const TableData = () => {
             return (
               <TableRow key={id}>
                 <TableCell>{id}</TableCell>
+                <TableCell>{`${isActive}`}</TableCell>
                 <TableCell>{firstName}</TableCell>
                 <TableCell>{lastName}</TableCell>
                 <TableCell>{age}</TableCell>
